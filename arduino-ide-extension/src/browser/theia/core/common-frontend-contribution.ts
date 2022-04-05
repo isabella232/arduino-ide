@@ -57,15 +57,21 @@ export class CommonFrontendContribution extends TheiaCommonFrontendContribution 
   }
 
   onWillStop(): OnWillStopAction | undefined {
+    console.log('onWillStop() triggered');
     return {
       reason: 'Dirty editors present',
       action: async () => {
+        console.log('onWillStop() action execution started');
         const sketch = await this.sketchServiceClient.currentSketch();
         if (sketch) {
+          console.log('onWillStop() sketch path: ' + sketch.uri);
           const isTemp = await this.sketchService.isTemp(sketch);
+          console.log('onWillStop() sketch is temporary: ' + isTemp.toString());
           if (isTemp) {
+            console.log('onWillStop() displaying sketch dialog');
             return this.showTempSketchDialog();
           } else if (this.shell.canSaveAll()) {
+            console.log('onWillStop() has to save stuff');
             const result = await remote.dialog.showMessageBox(remote.getCurrentWindow(), {
               title: nls.localize('theia/core/quitTitle', 'Are you sure you want to quit?'),
               message: nls.localize('theia/core/quitMessage', 'Any unsaved changes will not be saved.'),
@@ -76,7 +82,10 @@ export class CommonFrontendContribution extends TheiaCommonFrontendContribution 
             });
             return result.response === 1;
           }
+        } else {
+          console.log('onWillStop() no sketch found');
         }
+        console.log('onWillStop() returns true without action');
         return true;
       }
     };
