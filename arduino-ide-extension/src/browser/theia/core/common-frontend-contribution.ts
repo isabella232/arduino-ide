@@ -19,6 +19,8 @@ export class CommonFrontendContribution extends TheiaCommonFrontendContribution 
       CommonCommands.CLOSE_ALL_TABS,
       CommonCommands.COLLAPSE_PANEL,
       CommonCommands.TOGGLE_MAXIMIZED,
+      CommonCommands.PIN_TAB,
+      CommonCommands.UNPIN_TAB,
     ]) {
       commandRegistry.unregisterCommand(command);
     }
